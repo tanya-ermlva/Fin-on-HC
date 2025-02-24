@@ -38,13 +38,13 @@ export function CommandKDemo() {
     { title: 'Common issues and solutions', path: 'troubleshooting' }
   ]
 
-  // Update the items array with the correct type assertion
+  // Update the items array with explicit type literals
   const items: Item[] = [
     { type: 'ai' as const, id: 'ai-answer' },
-    ...articles.map(article => ({ 
-      type: 'article' as const, 
-      title: article.title, 
-      path: article.path 
+    ...articles.map(article => ({
+      type: 'article' as const,
+      title: article.title,
+      path: article.path
     }))
   ]
 
@@ -69,6 +69,7 @@ export function CommandKDemo() {
           if (selectedItem.type === 'ai') {
             handleAIGeneration()
           } else if (selectedItem.type === 'article') {
+            // Now TypeScript knows this has a path property
             handleArticleSelect(selectedItem.path)
           }
           break
@@ -83,7 +84,7 @@ export function CommandKDemo() {
 
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [open, items.length, isGeneratingAI])
+  }, [open, items.length, isGeneratingAI, selectedIndex]) // Added selectedIndex to deps
 
   // Reset selection when opening/closing
   useEffect(() => {
