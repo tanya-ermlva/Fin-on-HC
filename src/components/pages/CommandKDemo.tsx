@@ -14,6 +14,11 @@ import { LoadingMessages } from "../ui/LoadingMessages"
 import { SourceLink } from "../ui/SourceLink"
 import { InitialLoader } from "../ui/InitialLoader"
 
+// First, let's properly type the items array
+type Item = 
+  | { type: 'ai'; id: string }
+  | { type: 'article'; title: string; path: string }
+
 export function CommandKDemo() {
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState("")
@@ -33,13 +38,13 @@ export function CommandKDemo() {
     { title: 'Common issues and solutions', path: 'troubleshooting' }
   ]
 
-  // All items array (AI + articles)
-  const items = [
+  // Update the items array with proper typing
+  const items: Item[] = [
     { type: 'ai', id: 'ai-answer' },
-    ...articles.map(article => ({ type: 'article', ...article }))
+    ...articles.map(article => ({ type: 'article', title: article.title, path: article.path }))
   ]
 
-  // Handle keyboard navigation
+  // Then fix the case block by adding type checking
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!open) return
@@ -58,7 +63,7 @@ export function CommandKDemo() {
           const selectedItem = items[selectedIndex]
           if (selectedItem.type === 'ai') {
             handleAIGeneration()
-          } else {
+          } else if (selectedItem.type === 'article') {
             handleArticleSelect(selectedItem.path)
           }
           break
