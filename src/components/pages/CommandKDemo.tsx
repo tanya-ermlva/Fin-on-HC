@@ -38,16 +38,22 @@ export function CommandKDemo() {
     { title: 'Common issues and solutions', path: 'troubleshooting' }
   ]
 
-  // Update the items array with proper typing
+  // Update the items array with the correct type assertion
   const items: Item[] = [
-    { type: 'ai', id: 'ai-answer' },
-    ...articles.map(article => ({ type: 'article', title: article.title, path: article.path }))
+    { type: 'ai' as const, id: 'ai-answer' },
+    ...articles.map(article => ({ 
+      type: 'article' as const, 
+      title: article.title, 
+      path: article.path 
+    }))
   ]
 
   // Then fix the case block by adding type checking
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!open) return
+
+      const selectedItem = items[selectedIndex]
 
       switch (e.key) {
         case 'ArrowDown':
@@ -60,7 +66,6 @@ export function CommandKDemo() {
           break
         case 'Enter':
           e.preventDefault()
-          const selectedItem = items[selectedIndex]
           if (selectedItem.type === 'ai') {
             handleAIGeneration()
           } else if (selectedItem.type === 'article') {
