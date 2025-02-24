@@ -64,15 +64,14 @@ export function CommandKDemo() {
           e.preventDefault()
           setSelectedIndex(i => (i - 1 + items.length) % items.length)
           break
-        case 'Enter':
-          e.preventDefault()
-          if (selectedItem.type === 'ai') {
-            handleAIGeneration()
-          } else if (selectedItem.type === 'article') {
-            // Now TypeScript knows this has a path property
-            handleArticleSelect(selectedItem.path)
-          }
-          break
+          case 'Enter':
+            e.preventDefault();
+            if (selectedItem.type === 'ai') {
+              handleAIGeneration();
+            } else if (selectedItem.type === 'article') {
+              handleArticleSelect(selectedItem.path); // ✅ Now safe
+            }
+            break;
         case 'Escape':
           if (!isGeneratingAI) {
             setOpen(false)
